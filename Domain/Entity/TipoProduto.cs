@@ -2,10 +2,10 @@ namespace eCommerce.Domain.Entity
 {
     public enum TipoProduto
     {
-        Eletronico,
-        Roupa,
-        Alimento,
-        Livro,
-        Movel
+        ELETRONICO,
+        ROUPA,
+        ALIMENTO,
+        LIVRO,
+        MOVEL
     }
 }
