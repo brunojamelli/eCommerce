@@ -16,7 +16,12 @@ namespace eCommerce.Services
             _repository = repository;
         }
 
-        public CarrinhoDeCompras BuscarPorCarrinhoIdEClienteId(long carrinhoId, Cliente cliente)
+        public CarrinhoDeComprasService()
+        {
+
+        }
+
+        public virtual CarrinhoDeCompras BuscarPorCarrinhoIdEClienteId(long carrinhoId, Cliente cliente)
         {
             // var carrinho = _repository.FindByIdAsync(carrinhoId).Result; // Busca o carrinho pelo ID
             var carrinho = _repository.FindByIdAndClienteAsync(carrinhoId, cliente).Result;

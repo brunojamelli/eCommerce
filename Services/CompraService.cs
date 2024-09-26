@@ -22,6 +22,10 @@ namespace ecommerce.Services
         private readonly Dictionary<long, Cliente> _clientes = new();
         private readonly Dictionary<long, Produto> _produtos = new();
         private readonly Dictionary<long, CarrinhoDeCompras> _carrinhos = new();
+        public CompraService()
+        {
+            
+        }
         public CompraService(CarrinhoDeComprasService carrinhoService,
                              ClienteService clienteService,
                              IEstoqueExternal estoqueExternal,
