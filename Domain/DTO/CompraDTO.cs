@@ -6,6 +6,8 @@ namespace eCommerce.Domain.DTO
         public long? TransacaoPagamentoId { get; init; }
         public string Mensagem { get; init; }
 
+        //TODO: Frete?
+
         public CompraDTO(bool sucesso, long? transacaoPagamentoId, string mensagem)
         {
             Sucesso = sucesso;

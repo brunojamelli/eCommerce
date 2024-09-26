@@ -6,6 +6,7 @@ namespace eCommerce.Domain.DTO
     {
         public bool Disponivel { get; init; }
         public List<long> IdsProdutosIndisponiveis { get; init; }
+        //TODO: Id produto indisponível será imutável?
 
         public DisponibilidadeDTO(bool disponivel, List<long> idsProdutosIndisponiveis)
         {
