@@ -12,7 +12,7 @@ namespace eCommerce.External.Fake
         {
             // Simulação de autorização de pagamento
             // Aqui você pode aplicar regras de negócio para simular a autorização
-            bool autorizado = custoTotal < 1000; // Exemplo: autoriza pagamentos abaixo de R$ 1000
+            bool autorizado = custoTotal < 3000; // Exemplo: autoriza pagamentos abaixo de R$ 1000
             long transacaoId = autorizado ? DateTime.Now.Ticks : 0; // Usa o timestamp como ID da transação
 
             return new PagamentoDTO(autorizado, transacaoId);

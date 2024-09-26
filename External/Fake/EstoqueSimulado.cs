@@ -13,7 +13,8 @@ namespace eCommerce.External.Fake
         {
             { 1, 10 }, // Produto ID 1 tem 10 unidades disponíveis
             { 2, 5 },  // Produto ID 2 tem 5 unidades disponíveis
-            { 3, 0 }   // Produto ID 3 está fora de estoque
+            { 3, 1 },   // Produto ID 3 está fora de estoque
+            { 4, 0 }   // Produto ID 3 está fora de estoque
         };
 
         public EstoqueBaixaDTO DarBaixa(List<long> produtosIds, List<long> produtosQuantidades)

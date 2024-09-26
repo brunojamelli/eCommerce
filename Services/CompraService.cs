@@ -53,8 +53,8 @@ namespace ecommerce.Services
             // Inicializa um carrinho de compras
             var carrinho = new CarrinhoDeCompras(1, _clientes[1], new List<ItemCompra>
             {
-                new ItemCompra(1, _produtos[1], 2),
-                new ItemCompra(2, _produtos[2], 1)
+                new ItemCompra(1, _produtos[2], 1),
+                new ItemCompra(2, _produtos[3], 1)
             }, DateTime.Now);
             _carrinhos[1] = carrinho;
         }
