@@ -67,5 +67,32 @@ namespace eCommerce.Tests
             Assert.True(result.Sucesso);
             Assert.Equal("Compra finalizada com sucesso.", result.Mensagem);
         }
+
+        [Fact]
+        public async Task FinalizarCompra_FalhaEstoque()
+        {
+            // Arrange
+            var clienteId = 1L;
+            var carrinhoId = 1L;
+            var cliente = new Cliente { Id = clienteId };
+            var carrinho = new CarrinhoDeCompras
+            {
+                Id = carrinhoId,
+                Cliente = cliente,
+                Itens = new List<ItemCompra>
+                {
+                    new ItemCompra { Produto = new Produto { Id = 1, Preco = 10.0m }, Quantidade = 2 }
+                }
+            };
+
+            var disponibilidade = new DisponibilidadeDTO(false, new List<long> { 1 });
+
+            _clienteServiceMock.Setup(x => x.BuscarPorId(clienteId)).Returns(cliente);
+            _carrinhoServiceMock.Setup(x => x.BuscarPorCarrinhoIdEClienteId(carrinhoId, cliente)).Returns(carrinho);
+            _estoqueExternalMock.Setup(x => x.VerificarDisponibilidade(It.IsAny<List<long>>(), It.IsAny<List<long>>())).Returns(disponibilidade);
+
+            // Act & Assert
+            await Assert.ThrowsAsync<InvalidOperationException>(() => _compraService.FinalizarCompraAsync(carrinhoId, clienteId));
+        }
     }
 }
