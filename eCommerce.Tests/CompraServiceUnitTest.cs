@@ -25,102 +25,117 @@ namespace eCommerce.Tests
         }
 
         [Fact]
-        public async Task FinalizarCompraAsync_DeveCalcularFreteParaPesoAte5kgSemFrete()
+        public async Task FinalizarCompraAsync_CarrinhoComPesoAte5kgClienteBronze_SemFrete()
         {
-            // Arrange
-            var carrinho = CriarCarrinho(5); // 5kg
+            var carrinhoId = 1L;
             var cliente = CriarCliente(TipoCliente.BRONZE);
+            var carrinho = CriarCarrinho(5); // 5kg total, sem frete
 
-              _carrinhoServiceMock
-                .Setup(x => x.BuscarPorCarrinhoIdEClienteId(It.IsAny<long>(), It.IsAny<long>()))
-                .ReturnsAsync(carrinho);
-            _clienteServiceMock.Setup(x => x.BuscarPorId(It.IsAny<long>()))
-                .(cliente);
+            _carrinhoServiceMock
+                .Setup(x => x.BuscarPorCarrinhoIdEClienteId(It.Is<long>(id => id == carrinhoId), It.Is<Cliente>(c => c == cliente)));
 
-            // Act
-            CompraDTO compraDTO = await _compraService.FinalizarCompraAsync(1, 1);
+            _clienteServiceMock
+                .Setup(x => x.BuscarPorId(It.IsAny<long>()));
 
-            // Assert
+            CompraDTO compraDTO = await _compraService.FinalizarCompraAsync(carrinhoId, cliente.Id);
+
             Assert.True(compraDTO.Sucesso);
             Assert.Equal(500, _compraService.CalcularCustoTotal(carrinho)); // Sem frete
         }
 
         [Fact]
-        public async Task FinalizarCompraAsync_DeveAplicarFreteDe2ReaisPorKgParaPesoEntre5e10kg()
+        public async Task FinalizarCompraAsync_CarrinhoComPesoEntre5E10kgClienteBronze_FreteAplicado()
         {
-            // Arrange
-            var carrinho = CriarCarrinho(7); // 7kg
+            var carrinhoId = 1L;
             var cliente = CriarCliente(TipoCliente.BRONZE);
+            var carrinho = CriarCarrinho(7, 500); // 7kg total, com frete de 2,00 por kg
 
-            _carrinhoServiceMock.Setup(x => x.BuscarPorCarrinhoIdEClienteId(It.IsAny<long>(), cliente))
-                .(carrinho);
-            _clienteServiceMock.Setup(x => x.BuscarPorId(It.IsAny<long>()))
-                .(cliente);
+            _carrinhoServiceMock
+                .Setup(x => x.BuscarPorCarrinhoIdEClienteId(It.Is<long>(id => id == carrinhoId), It.Is<Cliente>(c => c == cliente)));
 
-            // Act
-            CompraDTO compraDTO = await _compraService.FinalizarCompraAsync(1, 1);
+            _clienteServiceMock
+                .Setup(x => x.BuscarPorId(It.IsAny<long>()));
 
-            // Assert
+            CompraDTO compraDTO = await _compraService.FinalizarCompraAsync(carrinhoId, cliente.Id);
+
             Assert.True(compraDTO.Sucesso);
-            Assert.Equal(514, _compraService.CalcularCustoTotal(carrinho)); // 7kg x R$2,00 = R$14, total R$ 500 + R$14
+            Assert.Equal(514, _compraService.CalcularCustoTotal(carrinho)); // 500 + (7 * 2 = 14)
         }
 
         [Fact]
-        public async Task FinalizarCompraAsync_DeveAplicarDescontoDe10PorcentoParaComprasAcimaDe500()
+        public async Task FinalizarCompraAsync_CarrinhoComPesoEntre10E50kgClientePrata_DescontoFreteAplicado()
         {
-            // Arrange
-            var carrinho = CriarCarrinho(4, 600); // 4kg, valor dos itens = R$ 600
-            var cliente = CriarCliente(TipoCliente.BRONZE);
+            var carrinhoId = 1L;
+            var cliente = CriarCliente(TipoCliente.PRATA);
+            var carrinho = CriarCarrinho(20, 500); // 20kg total, com frete de 4,00 por kg, e 50% de desconto
 
-            _carrinhoServiceMock.Setup(x => x.BuscarPorCarrinhoIdEClienteId(It.IsAny<long>(), cliente))
-                .(carrinho);
-            _clienteServiceMock.Setup(x => x.BuscarPorId(It.IsAny<long>()))
-                .(cliente);
+            _carrinhoServiceMock
+                .Setup(x => x.BuscarPorCarrinhoIdEClienteId(It.Is<long>(id => id == carrinhoId), It.Is<Cliente>(c => c == cliente)));
 
-            // Act
-            CompraDTO compraDTO = await _compraService.FinalizarCompraAsync(1, 1);
+            _clienteServiceMock
+                .Setup(x => x.BuscarPorId(It.IsAny<long>()));
 
-            // Assert
+            CompraDTO compraDTO = await _compraService.FinalizarCompraAsync(carrinhoId, cliente.Id);
+
             Assert.True(compraDTO.Sucesso);
-            Assert.Equal(540, _compraService.CalcularCustoTotal(carrinho)); // R$600 - 10% de desconto
+            Assert.Equal(540, _compraService.CalcularCustoTotal(carrinho)); // 500 + ((20 * 4) * 50% = 40)
         }
 
         [Fact]
-        public async Task FinalizarCompraAsync_DeveAplicarDescontoDe20PorcentoParaComprasAcimaDe1000()
+        public async Task FinalizarCompraAsync_CarrinhoComPesoAcimaDe50kgClienteOuro_SemFrete()
         {
-            // Arrange
-            var carrinho = CriarCarrinho(4, 1200); // 4kg, valor dos itens = R$ 1200
-            var cliente = CriarCliente(TipoCliente.BRONZE);
-
-            _carrinhoServiceMock.Setup(x => x.BuscarPorCarrinhoIdEClienteId(It.IsAny<long>(), cliente))
-                .(carrinho);
-            _clienteServiceMock.Setup(x => x.BuscarPorId(It.IsAny<long>()))
-                .(cliente);
-
-            // Act
-            CompraDTO compraDTO = await _compraService.FinalizarCompraAsync(1, 1);
-
-            // Assert
-            Assert.True(compraDTO.Sucesso);
-            Assert.Equal(960, _compraService.CalcularCustoTotal(carrinho)); // R$1200 - 20% de desconto
-        }
-
-        [Fact]
-        public async Task FinalizarCompraAsync_DeveAplicarFreteIsentoParaClienteOuro()
-        {
-            // Arrange
-            var carrinho = CriarCarrinho(15); // 15kg
+            var carrinhoId = 1L;
             var cliente = CriarCliente(TipoCliente.OURO);
+            var carrinho = CriarCarrinho(60, 500); // 60kg total, frete grátis para cliente ouro
 
-            _carrinhoServiceMock.Setup(x => x.BuscarPorCarrinhoIdEClienteId(It.IsAny<long>(), cliente)).(carrinho);
-            _clienteServiceMock.Setup(x => x.BuscarPorId(It.IsAny<long>())).(cliente);
+            _carrinhoServiceMock
+                .Setup(x => x.BuscarPorCarrinhoIdEClienteId(It.Is<long>(id => id == carrinhoId), It.Is<Cliente>(c => c == cliente)));
 
-            // Act
-            CompraDTO compraDTO = await _compraService.FinalizarCompraAsync(1, 1);
+            _clienteServiceMock
+                .Setup(x => x.BuscarPorId(It.IsAny<long>()));
 
-            // Assert
+            CompraDTO compraDTO = await _compraService.FinalizarCompraAsync(carrinhoId, cliente.Id);
+
             Assert.True(compraDTO.Sucesso);
-            Assert.Equal(500, _compraService.CalcularCustoTotal(carrinho)); // Cliente ouro não paga frete
+            Assert.Equal(500, _compraService.CalcularCustoTotal(carrinho)); // Sem frete para cliente Ouro
+        }
+
+        [Fact]
+        public async Task FinalizarCompraAsync_CarrinhoComValorAcimaDe500Desconto10Aplicado()
+        {
+            var carrinhoId = 1L;
+            var cliente = CriarCliente(TipoCliente.BRONZE);
+            var carrinho = CriarCarrinho(3, 600); // Valor do carrinho > 500
+
+            _carrinhoServiceMock
+                .Setup(x => x.BuscarPorCarrinhoIdEClienteId(It.Is<long>(id => id == carrinhoId), It.Is<Cliente>(c => c == cliente)));
+
+            _clienteServiceMock
+                .Setup(x => x.BuscarPorId(It.IsAny<long>()));
+
+            CompraDTO compraDTO = await _compraService.FinalizarCompraAsync(carrinhoId, cliente.Id);
+
+            Assert.True(compraDTO.Sucesso);
+            Assert.Equal(540, _compraService.CalcularCustoTotal(carrinho)); // 600 * 10% de desconto
+        }
+
+        [Fact]
+        public async Task FinalizarCompraAsync_CarrinhoComValorAcimaDe1000Desconto20Aplicado()
+        {
+            var carrinhoId = 1L;
+            var cliente = CriarCliente(TipoCliente.BRONZE);
+            var carrinho = CriarCarrinho(3, 1200); // Valor do carrinho > 1000
+
+            _carrinhoServiceMock
+                .Setup(x => x.BuscarPorCarrinhoIdEClienteId(It.Is<long>(id => id == carrinhoId), It.Is<Cliente>(c => c == cliente)));
+
+            _clienteServiceMock
+                .Setup(x => x.BuscarPorId(It.IsAny<long>()));
+
+            CompraDTO compraDTO = await _compraService.FinalizarCompraAsync(carrinhoId, cliente.Id);
+
+            Assert.True(compraDTO.Sucesso);
+            Assert.Equal(960, _compraService.CalcularCustoTotal(carrinho)); // 1200 * 20% de desconto
         }
 
         // Métodos Auxiliares
@@ -137,7 +152,7 @@ namespace eCommerce.Tests
 
         private Cliente CriarCliente(TipoCliente tipo)
         {
-            return new Cliente { Tipo = tipo };
+            return new Cliente { Id = 1, Tipo = tipo };
         }
     }
 }
