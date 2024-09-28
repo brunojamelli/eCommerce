@@ -21,9 +21,11 @@ Este projeto tem como objetivo testar a lógica de um sistema de carrinho de com
 ## Estrutura do Projeto
 
 - `/src` - Contém os arquivos de código-fonte do projeto.
-  - **CompraController**: Controlador responsável por gerenciar a finalização das compras.
-  - **CompraService**: Serviço que contém a lógica de negócio, como cálculo do preço total da compra e interação com serviços externos.
-- `/tests` - Contém os arquivos de teste automatizados.
+  - `/Controllers` - Contém todos os arquivos de Controllers do projeto.
+   - **CompraController**: Controlador responsável por gerenciar a finalização das compras.
+  - `/Controllers` - Contém todos os arquivos de Services do projeto.
+   - **CompraService**: Serviço que contém a lógica de negócio, como cálculo do preço total da compra e interação com serviços externos.
+- `/Ecommerce.tests` - Contém os arquivos de teste automatizados.
   - Testes para a camada de **Serviço**: Validação do cálculo do preço total.
   - Testes para a camada de **Controller**: Simulação de serviços de estoque e pagamento, e validação dos endpoints.
 
@@ -33,12 +35,25 @@ Este projeto tem como objetivo testar a lógica de um sistema de carrinho de com
 - **Moq** para a criação de mocks.
 - **FakeItEasy** para a criação de fakes nos testes.
   
-## Critérios de Avaliação
-- Cobertura de código de **100%** para os métodos `finalizarCompra` e o cálculo do preço total.
-- Aplicação correta dos critérios de teste de **caixa preta** e **caixa branca**.
-
 ## Contribuições
 Este projeto foi desenvolvido em equipe, com cada integrante sendo responsável por diferentes partes do código e dos testes.
+
+## Como executar o projeto
+``
+dotnet watch run
+``
+- Com esse comando o projeto ira executar a aplicação e abrir uma aba do swagger em seu navegador
+
+## Como executar os testes
+
+``
+dotnet test
+``
+
+``
+dotnet test --logger "console;verbosity=detailed"
+``
+
 
 ## Autores
 - Nome 1 - Responsável pela camada de serviço.

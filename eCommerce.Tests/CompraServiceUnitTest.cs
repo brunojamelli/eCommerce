@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using ecommerce.Services;
 using eCommerce.Domain.DTO;
 using eCommerce.Domain.Entity;
+using eCommerce.External;
+using eCommerce.External.Fake;
 using eCommerce.Services;
 using Ecommerce.Entity;
 using Moq;
@@ -16,12 +18,16 @@ namespace eCommerce.Tests
         private readonly Mock<ClienteService> _clienteServiceMock;
         private readonly Mock<CarrinhoDeComprasService> _carrinhoServiceMock;
         private readonly CompraService _compraService;
+        private readonly IEstoqueExternal _estoqueExternal;
+        private readonly IPagamentoExternal _pagamentoExternal;
         public CompraServiceUnitTest()
         {
             _clienteServiceMock = new Mock<ClienteService>();
             _carrinhoServiceMock = new Mock<CarrinhoDeComprasService>();
+            _estoqueExternal = new EstoqueSimulado();
+            _pagamentoExternal = new PagamentoSimulado();
 
-            _compraService = new CompraService(_carrinhoServiceMock.Object, _clienteServiceMock.Object, null, null);
+            _compraService = new CompraService(_carrinhoServiceMock.Object, _clienteServiceMock.Object, _estoqueExternal, _pagamentoExternal);
         }
 
         [Fact]
