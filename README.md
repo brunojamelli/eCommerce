@@ -46,14 +46,22 @@ dotnet watch run
 
 ## Como executar os testes
 
+### Executar os testes do projeto
 ``
 dotnet test
 ``
-
+### Executar os testes do projeto de modo mais detalhado
 ``
 dotnet test --logger "console;verbosity=detailed"
 ``
-
+### Executar apenas uma classe especifica
+```
+dotnet test --filter "FullyQualifiedName~YourNamespace.YourTestClassName"
+```
+#### Exemplo
+```
+dotnet test --filter "FullyQualifiedName~CalculaFreteProdutoTest"
+```
 
 ## Autores
 - Nome 1 - Responsável pela camada de serviço.
