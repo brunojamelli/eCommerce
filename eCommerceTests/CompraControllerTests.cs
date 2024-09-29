@@ -11,12 +11,12 @@ namespace eCommerce.Services
 {
     public class CompraControllerTests
     {
-        private readonly Mock<CompraService> _compraServiceMock;
+        private readonly Mock<ICompraService> _compraServiceMock;
         private readonly CompraController _controller;
         public CompraControllerTests()
         {
             // Configurando o mock do serviço de compra
-            _compraServiceMock = new Mock<CompraService>();
+            _compraServiceMock = new Mock<ICompraService>();
 
             // Criando a instância do controller, injetando o serviço de compra mockado
             _controller = new CompraController(_compraServiceMock.Object);

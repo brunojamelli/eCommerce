@@ -12,7 +12,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<CompraService>();
+builder.Services.AddScoped<ICompraService,CompraService>();
 builder.Services.AddScoped<CarrinhoDeComprasService>();
 builder.Services.AddScoped<ClienteService>();
 builder.Services.AddScoped<IEstoqueExternal, EstoqueSimulado>(); // Registro da implementação simulado
