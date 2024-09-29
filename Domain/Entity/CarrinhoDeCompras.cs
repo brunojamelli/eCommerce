@@ -35,6 +35,10 @@ namespace eCommerce.Domain.Entity
         {
             return Itens.Sum(item => item.Produto.Peso * item.Quantidade);
         }
+        public decimal CalcularValorTotalItens()
+        {
+            return Itens.Sum(item => item.Produto.Preco * item.Quantidade);
+        }
         public decimal CalcularFrete()
         {
             decimal pesoTotal = CalcularPesoTotal();
@@ -79,6 +83,36 @@ namespace eCommerce.Domain.Entity
                 default:
                     return frete; // Pagamento integral
             }
-    }
+        }
+
+        // Método para calcular o desconto com base no valor total dos itens
+        private decimal CalcularDesconto()
+        {
+            decimal valorTotal = CalcularValorTotalItens();
+            decimal desconto = 0;
+
+            if (valorTotal > 1000)
+            {
+                desconto = valorTotal * 0.20m; // 20% de desconto
+            }
+            else if (valorTotal > 500)
+            {
+                desconto = valorTotal * 0.10m; // 10% de desconto
+            }
+
+            return desconto;
+        }
+
+        public decimal CalcularValorFinal()
+        {
+            decimal valorTotal = CalcularValorTotalItens();
+            decimal desconto = CalcularDesconto();
+            decimal valorComDesconto = valorTotal - desconto;
+            decimal freteComDesconto = CalcularDescontoFrete();
+
+            return valorComDesconto + freteComDesconto; // Retorna o valor final incluindo frete
+        }
+
+
     }
 }
