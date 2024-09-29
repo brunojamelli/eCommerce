@@ -12,7 +12,8 @@ namespace eCommerce.Tests
         [Theory(DisplayName = "Teste para carrinho com peso total até 5 kg (frete gratuito):")]
         [InlineData(2.50, 2.49, 0)] 
         [InlineData(2.50, 2.50, 0)]  
-        [InlineData(2.50, 2.51, 0)] 
+        [InlineData(2.50, 2.51, 0)]
+        [InlineData(1.00, 1.94, 0)] 
         public void TestCalcularFrete_PesoTotalAte5Kg_FreteGratis(decimal pesoProd1, decimal pesoProd2, decimal freteEsperado)
         {
             // Arrange
@@ -36,13 +37,20 @@ namespace eCommerce.Tests
             Assert.Equal(freteEsperado, frete); // Frete deve ser gratuito
         }
 
-        [Fact(DisplayName = "Teste para carrinho com peso total entre 5 e 10 kg (R$ 2,00/kg):")]
-        public void TestCalcularFrete_PesoTotalEntre5E10Kg()
+        [Theory(DisplayName = "Teste para carrinho com peso total entre 5 e 10 kg (R$ 2,00/kg):")]
+        [InlineData(2.50, 2.50, 10)] 
+        [InlineData(5.00, 5.00, 20)]  
+        [InlineData(2.50, 2.51, 10.02)]
+        [InlineData(2.50, 2.52, 10.04)]
+        [InlineData(4.00, 5.98, 19.96)]
+        [InlineData(4.00, 5.99, 19.98)]
+        [InlineData(4.00, 3.23, 14.46)]
+        public void TestCalcularFrete_PesoTotalEntre5E10Kg(decimal pesoProd1, decimal pesoProd2, decimal freteEsperado) 
         {
             // Arrange
            // Produtos de exemplo
-            var produto1 = new Produto(1, "Notebook - Dell Inspiron", "Notebook para trabalho e estudos", 3500m, 3.5m, TipoProduto.ELETRONICO);
-            var produto2 = new Produto(2, "Teclado Mecânico Gamer", "Teclado RGB com teclas mecânicas", 499.99m, 2.6m, TipoProduto.ELETRONICO);
+            var produto1 = new Produto(1, "Notebook - Dell Inspiron", "Notebook para trabalho e estudos", 3500m, pesoProd1, TipoProduto.ELETRONICO);
+            var produto2 = new Produto(2, "Teclado Mecânico Gamer", "Teclado RGB com teclas mecânicas", 499.99m, pesoProd2, TipoProduto.ELETRONICO);
             
             // Carrinho de exemplo
             var itens = new List<ItemCompra>
@@ -57,7 +65,7 @@ namespace eCommerce.Tests
             var frete = carrinho.CalcularFrete();
 
             // Assert
-            Assert.Equal(12.2m, frete); // Peso total: 6.1 kg, frete: 6.1 kg * R$ 2,00
+            Assert.Equal(freteEsperado, frete); // Peso total: 6.1 kg, frete: 6.1 kg * R$ 2,00
         }
         [Fact(DisplayName = "Teste para carrinho com peso entre 10 kg e 50 kg (R$ 4,00 por kg):")]
         public void TestCalcularFrete_PesoEntre10E50kg()
