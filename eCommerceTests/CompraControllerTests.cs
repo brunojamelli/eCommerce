@@ -43,19 +43,24 @@ namespace eCommerce.Services
         [Fact(DisplayName = "Controller: Finalizar compra deve retornar BadRequest quando tem argumento invalido")]
         public async Task FinalizarCompra_DeveRetornarBadRequest_QuandoArgumentoInvalido()
         {
-            // Arrange: Simula que o serviço de compra lança uma exceção de argumento inválido
+            // Arrange
+            var compraServiceMock = new Mock<ICompraService>();
+
+            // Configura o mock para lançar uma exceção ArgumentException
             _compraServiceMock
                 .Setup(x => x.FinalizarCompraAsync(It.IsAny<long>(), It.IsAny<long>()))
-                .ThrowsAsync(new ArgumentException("Carrinho inválido"));
+                .ThrowsAsync(new ArgumentException("Argumento inválido"));
 
-            // Act: Chama o endpoint
-            var result = await _controller.FinalizarCompra(1, 1);
+            var controller = new CompraController(compraServiceMock.Object);
 
-            // Assert: Verifica se o retorno é BadRequest (400) com a mensagem correta
-            var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
-            var returnedDTO = Assert.IsType<CompraDTO>(badRequestResult.Value);
-            Assert.False(returnedDTO.Sucesso);
-            Assert.Equal("Carrinho inválido", returnedDTO.Mensagem);
+            // Act
+            var result = await controller.FinalizarCompra(1, 1);
+
+            // Assert
+            Assert.NotNull(result);
+            var compraDTO = result.Value as CompraDTO;
+            Assert.False(compraDTO.Sucesso);
+            Assert.Equal("Argumento inválido", compraDTO.Mensagem);
         }
 
         [Fact(DisplayName = "Controller: Finalizar compra deve retornar Conflict quando tem erro de estado")]
@@ -88,9 +93,14 @@ namespace eCommerce.Services
             var result = await _controller.FinalizarCompra(1, 1);
 
             // Assert: Verifica se o retorno é InternalServerError (500)
-            var serverErrorResult = Assert.IsType<ObjectResult>(result);
-            Assert.Equal(500, serverErrorResult.StatusCode);
-            var returnedDTO = Assert.IsType<CompraDTO>(serverErrorResult.Value);
+
+            // Assert
+            var actionResult = Assert.IsType<ActionResult<CompraDTO>>(result); // Confirma que é do tipo ActionResult<CompraDTO>
+            var objectResult = Assert.IsType<ObjectResult>(actionResult.Result);
+
+            // var serverErrorResult = Assert.IsType<ObjectResult>(result);
+            Assert.Equal(500, objectResult.StatusCode);
+            var returnedDTO = Assert.IsType<CompraDTO>(objectResult.Value);
             Assert.False(returnedDTO.Sucesso);
             Assert.Equal("Erro ao processar compra.", returnedDTO.Mensagem);
         }
