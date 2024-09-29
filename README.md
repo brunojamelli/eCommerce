@@ -39,7 +39,8 @@ Este projeto tem como objetivo testar a lógica de um sistema de carrinho de com
 - **xUnit** para os testes automatizados.
 - **Moq** para a criação de mocks.
 - **FakeItEasy** para a criação de fakes nos testes.
-  
+
+## Resultados
 
 ## Como executar o projeto
 ``
