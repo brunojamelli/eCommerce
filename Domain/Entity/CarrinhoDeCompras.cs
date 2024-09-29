@@ -56,7 +56,7 @@ namespace eCommerce.Domain.Entity
                     valorFrete = pesoTotal * 2m;
                     break;
 
-                case var _ when pesoTotal >= 10.00m && pesoTotal < 50.00m:
+                case var _ when pesoTotal >= 10.00m && pesoTotal <= 50.00m:
                     valorFrete = pesoTotal * 4m;
                     break;
 

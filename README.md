@@ -58,13 +58,21 @@ dotnet test
 ``
 dotnet test --logger "console;verbosity=detailed"
 ``
-### Executar apenas uma classe especifica
+### Executar apenas uma classe específica
 ```
 dotnet test --filter "FullyQualifiedName~YourNamespace.YourTestClassName"
 ```
 #### Exemplo
 ```
 dotnet test --filter "FullyQualifiedName~CalculaFreteProdutoTest"
+```
+
+```
+dotnet test --filter "FullyQualifiedName~CalculaFreteCarrinhoTest"
+```
+#### Execução detalhada de uma classe específica
+```
+dotnet test --logger "console;verbosity=detailed" --filter "FullyQualifiedName~CalculaFreteProdutoTest"
 ```
 
 ## Licença
