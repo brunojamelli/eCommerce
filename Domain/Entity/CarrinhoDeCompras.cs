@@ -31,5 +31,37 @@ namespace eCommerce.Domain.Entity
             Itens = itens;
             Data = data;
         }
+        public decimal CalcularPesoTotal()
+        {
+            return Itens.Sum(item => item.Produto.Peso * item.Quantidade);
+        }
+        public decimal CalcularFrete()
+        {
+            decimal pesoTotal = CalcularPesoTotal();
+            decimal valorFrete;
+            switch (pesoTotal)
+            {
+                case var _ when pesoTotal <= 5.00m:
+                    valorFrete = 0m;
+                    break;
+
+                case var _ when pesoTotal > 5.00m && pesoTotal < 10.00m:
+                    valorFrete = pesoTotal * 2m;
+                    break;
+
+                case var _ when pesoTotal >= 10.00m && pesoTotal < 50.00m:
+                    valorFrete = pesoTotal * 4m;
+                    break;
+
+                case var _ when pesoTotal > 50.00m:
+                    valorFrete = pesoTotal * 7m;
+                    break;
+
+                default:
+                    throw new Exception("Não existe regra para implementar o frete com o peso informado");
+            }
+
+            return valorFrete;
+        }
     }
 }

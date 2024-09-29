@@ -21,7 +21,7 @@ namespace eCommerce.Tests
         private readonly CompraService _compraService;
         public CompraServiceTests()
         {
-             _carrinhoServiceMock = new Mock<CarrinhoDeComprasService>();
+            _carrinhoServiceMock = new Mock<CarrinhoDeComprasService>();
             _clienteServiceMock = new Mock<ClienteService>();
             _estoqueExternalMock = new Mock<IEstoqueExternal>();
             _pagamentoExternalMock = new Mock<IPagamentoExternal>();
@@ -94,5 +94,6 @@ namespace eCommerce.Tests
             // Act & Assert
             await Assert.ThrowsAsync<InvalidOperationException>(() => _compraService.FinalizarCompraAsync(carrinhoId, clienteId));
         }
+       
     }
 }

@@ -36,17 +36,5 @@ namespace Ecommerce.Entity
             Tipo = tipo;
         }
 
-        public decimal CalcularFrete()
-        {
-            var peso = this.Peso;
-            return peso switch
-            {
-                <= 5.00m => 0,
-                > 5.00m  and < 10.00m => 2,
-                > 10.00m and < 50.00m => 4,
-                > 50.00m => 7,
-                _ => throw new Exception("Não existe regra para implementar o frete com o peso informado"),
-            };
-        }
     }
 }
