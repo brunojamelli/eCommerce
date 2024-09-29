@@ -19,13 +19,20 @@ namespace eCommerce.Domain.Entity
 
         [Required]
         [MaxLength(200)] // Definindo um limite de caracteres para o endereço
-        public string Endereco { get; set; }
+        public string? Endereco { get; set; }
 
         [Required]
         [EnumDataType(typeof(TipoCliente))] // Armazenar o enum como string no banco
         public TipoCliente Tipo { get; set; }
 
         public Cliente() {}
+
+        public Cliente(long id, string nome, TipoCliente tipo)
+        {
+            Id = id;
+            Nome = nome;
+            Tipo = tipo;
+        }
 
         public Cliente(long id, string nome, string endereco, TipoCliente tipo)
         {
