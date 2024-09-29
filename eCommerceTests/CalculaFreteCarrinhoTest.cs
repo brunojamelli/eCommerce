@@ -32,8 +32,9 @@ namespace eCommerce.Tests
             // Assert
             Assert.Equal(0m, frete); // Frete deve ser gratuito
         }
+
         [Fact(DisplayName = "Teste para carrinho com peso total entre 5 e 10 kg (R$ 2,00/kg):")]
-        public void TestCalcularFrete_PesoTotalEntre5E10Kg_Frete2PorKg()
+        public void TestCalcularFrete_PesoTotalEntre5E10Kg()
         {
             // Arrange
            // Produtos de exemplo
@@ -53,8 +54,50 @@ namespace eCommerce.Tests
             var frete = carrinho.CalcularFrete();
 
             // Assert
-            Assert.Equal(13m, frete); // (6.5 kg * R$ 2,00 = R$ 13,00)
+            Assert.Equal(12.2m, frete); // Peso total: 6.1 kg, frete: 6.1 kg * R$ 2,00
+        }
+        [Fact(DisplayName = "Teste para carrinho com peso entre 10 kg e 50 kg (R$ 4,00 por kg):")]
+        public void TestCalcularFrete_PesoEntre10E50kg()
+        {
+            // Produtos de exemplo
+            var produto1 = new Produto(1, "TV LED 50\"", "Smart TV 4K Ultra HD", 2799.99m, 12.0m, TipoProduto.ELETRONICO);
+            var produto2 = new Produto(2, "Barbeador Elétrico", "Barbeador sem fio", 399.99m, 1.5m, TipoProduto.ELETRONICO);
+            
+            // Carrinho de exemplo
+            var itens = new List<ItemCompra>
+            {
+                new ItemCompra(1, produto1, 1),
+                new ItemCompra(2, produto2, 1)
+            };
+
+            var carrinho = new CarrinhoDeCompras(1, new Cliente(1,"Bruno", TipoCliente.BRONZE), itens, DateTime.Now);
+
+            // Calcula o frete
+            decimal frete = carrinho.CalcularFrete();
+
+            // Assert - frete deve ser calculado como 4,00 por kg
+            Assert.Equal(54m, frete); // Peso total: 13.5 kg, frete: 13.5 kg * R$ 4,00
         }
 
+        [Fact(DisplayName = "Teste para carrinho com peso acima de 50 kg (R$ 7,00 por kg):")]
+        public void TestCalcularFrete_PesoAcima50kg()
+        {
+            // Produtos de exemplo
+            var produto1 = new Produto(1, "Máquina de Lavar 12kg", "Máquina de lavar roupas", 1999.99m, 51.5m, TipoProduto.ELETRONICO);
+            
+            // Carrinho de exemplo
+            var itens = new List<ItemCompra>
+            {
+                new ItemCompra(1, produto1, 1)
+            };
+
+            var carrinho = new CarrinhoDeCompras(1, new Cliente(1,"Bruno", TipoCliente.BRONZE), itens, DateTime.Now);
+
+            // Calcula o frete
+            decimal frete = carrinho.CalcularFrete();
+
+            // Assert - frete deve ser calculado como 7,00 por kg
+            Assert.Equal(360.5m, frete); // Peso total: 51.5 kg, frete: 51.5 kg * R$ 7,00
+        }
     }
 }
