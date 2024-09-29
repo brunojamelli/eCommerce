@@ -70,8 +70,8 @@ namespace eCommerce.Tests
         [Theory(DisplayName = "Teste para carrinho com peso entre 10 kg e 50 kg (R$ 4,00 por kg):")]
         [InlineData(5.00, 5.01, 40.04)]
         [InlineData(5.00, 5.02, 40.08)]
-        [InlineData(20.00, 29.98, 40.08)]
-        [InlineData(10.00, 39.99, 40.08)]
+        [InlineData(20.00, 29.98, 199.92)]
+        [InlineData(10.00, 39.99, 199.96)]
         [InlineData(3.00, 7.00, 40.00)]
         [InlineData(35.00, 15.00, 200.00)]
         [InlineData(10.01, 20.00, 120.04)]
@@ -122,6 +122,7 @@ namespace eCommerce.Tests
         [InlineData(30.00, 20.00, 200.00)]
         [InlineData(30.00, 20.01, 350.07)]
         [InlineData(30.00, 20.02, 350.14)]
+        [InlineData(60.00, 40.54, 703.78)]
         public void TestCalcularFrete_PesoIgual50kg_E_MaiorQue50(decimal pesoProd1, decimal pesoProd2, decimal freteEsperado)
         {
             // Produtos de exemplo
