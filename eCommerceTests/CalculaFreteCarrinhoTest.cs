@@ -9,13 +9,16 @@ namespace eCommerce.Tests
 {
     public class CalculaFreteCarrinhoTest
     {
-        [Fact(DisplayName = "Teste para carrinho com peso total até 5 kg (frete gratuito):")]
-        public void TestCalcularFrete_PesoTotalAte5Kg_FreteGratis()
+        [Theory(DisplayName = "Teste para carrinho com peso total até 5 kg (frete gratuito):")]
+        [InlineData(2.50, 2.49, 0)] 
+        [InlineData(2.50, 2.50, 0)]  
+        [InlineData(2.50, 2.51, 0)] 
+        public void TestCalcularFrete_PesoTotalAte5Kg_FreteGratis(decimal pesoProd1, decimal pesoProd2, decimal freteEsperado)
         {
             // Arrange
             // Produtos de exemplo
-            var produto1 = new Produto(1, "Livro - Programação C#", "Livro sobre C#", 99.90m, 2.5m, TipoProduto.LIVRO);
-            var produto2 = new Produto(2, "Fone de Ouvido Bluetooth", "Fone sem fio com tecnologia Bluetooth", 199.99m, 2.5m, TipoProduto.ELETRONICO);
+            var produto1 = new Produto(1, "Livro - Programação C#", "Livro sobre C#", 99.90m, pesoProd1, TipoProduto.LIVRO);
+            var produto2 = new Produto(2, "Fone de Ouvido Bluetooth", "Fone sem fio com tecnologia Bluetooth", 199.99m, pesoProd2, TipoProduto.ELETRONICO);
             
             // Carrinho de exemplo
             var itens = new List<ItemCompra>
@@ -30,7 +33,7 @@ namespace eCommerce.Tests
             var frete = carrinho.CalcularFrete(); // Função para calcular o frete
 
             // Assert
-            Assert.Equal(0m, frete); // Frete deve ser gratuito
+            Assert.Equal(freteEsperado, frete); // Frete deve ser gratuito
         }
 
         [Fact(DisplayName = "Teste para carrinho com peso total entre 5 e 10 kg (R$ 2,00/kg):")]
