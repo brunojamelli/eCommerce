@@ -63,5 +63,22 @@ namespace eCommerce.Domain.Entity
 
             return valorFrete;
         }
+        public decimal CalcularDescontoFrete()
+        {
+            decimal pesoTotal = CalcularPesoTotal();
+            decimal frete = CalcularFrete();
+
+            // Aplicando o desconto baseado no tipo de cliente
+            switch (Cliente.Tipo)
+            {
+                case TipoCliente.OURO:
+                    return 0; // Isenção total do frete
+                case TipoCliente.PRATA:
+                    return frete * 0.5m; // 50% de desconto
+                case TipoCliente.BRONZE:
+                default:
+                    return frete; // Pagamento integral
+            }
+    }
     }
 }
