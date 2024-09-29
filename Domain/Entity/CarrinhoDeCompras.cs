@@ -22,7 +22,7 @@ namespace eCommerce.Domain.Entity
         [Required]
         public DateTime Data { get; set; }
 
-        public CarrinhoDeCompras() {}
+        public CarrinhoDeCompras() { }
 
         public CarrinhoDeCompras(long id, Cliente cliente, List<ItemCompra> itens, DateTime data)
         {
@@ -31,14 +31,17 @@ namespace eCommerce.Domain.Entity
             Itens = itens;
             Data = data;
         }
+
         public decimal CalcularPesoTotal()
         {
             return Itens.Sum(item => item.Produto.Peso * item.Quantidade);
         }
+        
         public decimal CalcularValorTotalItens()
         {
             return Itens.Sum(item => item.Produto.Preco * item.Quantidade);
         }
+        
         public decimal CalcularFrete()
         {
             decimal pesoTotal = CalcularPesoTotal();
@@ -67,6 +70,7 @@ namespace eCommerce.Domain.Entity
 
             return valorFrete;
         }
+        
         public decimal CalcularDescontoFrete()
         {
             decimal pesoTotal = CalcularPesoTotal();
@@ -86,7 +90,7 @@ namespace eCommerce.Domain.Entity
         }
 
         // Método para calcular o desconto com base no valor total dos itens
-        private decimal CalcularDesconto()
+        public decimal CalcularDescontoItems()
         {
             decimal valorTotal = CalcularValorTotalItens();
             decimal desconto = 0;
@@ -106,13 +110,12 @@ namespace eCommerce.Domain.Entity
         public decimal CalcularValorFinal()
         {
             decimal valorTotal = CalcularValorTotalItens();
-            decimal desconto = CalcularDesconto();
+            decimal desconto = CalcularDescontoItems();
             decimal valorComDesconto = valorTotal - desconto;
             decimal freteComDesconto = CalcularDescontoFrete();
 
             return valorComDesconto + freteComDesconto; // Retorna o valor final incluindo frete
         }
-
 
     }
 }

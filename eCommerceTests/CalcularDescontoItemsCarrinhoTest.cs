@@ -7,7 +7,7 @@ using Ecommerce.Entity;
 
 namespace eCommerceTests
 {
-    public class CalcularDescontoTest
+    public class CalcularDescontoItemsCarrinhoTest
     {
         [Fact(DisplayName = "Teste: Frete para cliente Ouro deve ser zero.")]
         public void TestFreteClienteOuro()
@@ -81,6 +81,50 @@ namespace eCommerceTests
             Assert.Equal(freteEsperado, frete);
         }
 
+        [Fact(DisplayName = "Teste: Desconto de 10% para carrinho acima de R$ 500,00.")]
+        public void TestDescontoDe10PorCento()
+        {
+            // Arrange
+            var carrinho = new CarrinhoDeCompras(1, new Cliente { Id = 1, Tipo = TipoCliente.BRONZE }, new List<ItemCompra>(), DateTime.Now);
+            decimal valorTotal = 600.00m; // Valor total acima de R$ 500,00
+            decimal descontoEsperado = valorTotal * 0.10m;
+
+            // Act
+            var descontoCalculado = carrinho.CalcularDescontoItems();
+
+            // Assert
+            Assert.Equal(descontoEsperado, descontoCalculado);
+        }
+
+        [Fact(DisplayName = "Teste: Desconto de 20% para carrinho acima de R$ 1000,00.")]
+        public void TestDescontoDe20PorCento()
+        {
+            // Arrange
+            var carrinho = new CarrinhoDeCompras(1, new Cliente { Id = 1, Tipo = TipoCliente.BRONZE }, new List<ItemCompra>(), DateTime.Now);
+            decimal valorTotal = 1200.00m; // Valor total acima de R$ 1000,00
+            decimal descontoEsperado = valorTotal * 0.20m;
+
+            // Act
+            var descontoCalculado = carrinho.CalcularDescontoItems();
+
+            // Assert
+            Assert.Equal(descontoEsperado, descontoCalculado);
+        }
+
+        [Fact(DisplayName = "Teste: Sem desconto para carrinho até R$ 500,00.")]
+        public void TestSemDesconto()
+        {
+            // Arrange
+            var carrinho = new CarrinhoDeCompras(1, new Cliente { Id = 1, Tipo = TipoCliente.BRONZE }, new List<ItemCompra>(), DateTime.Now);
+            decimal valorTotal = 400.00m; // Valor total abaixo de R$ 500,00
+            decimal descontoEsperado = 0m;
+
+            // Act
+            var descontoCalculado = carrinho.CalcularDescontoItems();
+
+            // Assert
+            Assert.Equal(descontoEsperado, descontoCalculado);
+        }
 
     }
 }
