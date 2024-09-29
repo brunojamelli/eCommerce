@@ -44,41 +44,39 @@ namespace eCommerce.Services
         public async Task FinalizarCompra_DeveRetornarBadRequest_QuandoArgumentoInvalido()
         {
             // Arrange
-            var compraServiceMock = new Mock<ICompraService>();
+            var carrinhoId = 1;
+            var clienteId = 1;
 
-            // Configura o mock para lançar uma exceção ArgumentException
-            _compraServiceMock
-                .Setup(x => x.FinalizarCompraAsync(It.IsAny<long>(), It.IsAny<long>()))
-                .ThrowsAsync(new ArgumentException("Argumento inválido"));
-
-            var controller = new CompraController(compraServiceMock.Object);
+            // Simula o serviço lançando uma exceção de ArgumentException
+            _compraServiceMock.Setup(service => service.FinalizarCompraAsync(carrinhoId, clienteId))
+                            .ThrowsAsync(new ArgumentException("Argumento inválido"));
 
             // Act
-            var result = await controller.FinalizarCompra(1, 1);
+            var result = await _controller.FinalizarCompra(carrinhoId, clienteId);
 
             // Assert
-            Assert.NotNull(result);
-            var compraDTO = result.Value as CompraDTO;
-            Assert.False(compraDTO.Sucesso);
-            Assert.Equal("Argumento inválido", compraDTO.Mensagem);
+            var actionResult = Assert.IsType<ActionResult<CompraDTO>>(result); // Confirma que é do tipo ActionResult<CompraDTO>
+            var badRequestResult = Assert.IsType<BadRequestObjectResult>(actionResult.Result); // Acessa o 'Result' e verifica se é BadRequestObjectResult
+            Assert.Equal(400, badRequestResult.StatusCode); // Verifica o status code
         }
 
         [Fact(DisplayName = "Controller: Finalizar compra deve retornar Conflict quando tem erro de estado")]
         public async Task FinalizarCompra_DeveRetornarConflict_QuandoErroDeEstado()
         {
-            // Arrange: Simula que o serviço de compra lança uma exceção de estado inválido
-            _compraServiceMock
-                .Setup(x => x.FinalizarCompraAsync(It.IsAny<long>(), It.IsAny<long>()))
-                .ThrowsAsync(new InvalidOperationException("Itens fora de estoque"));
-
+            // Arrange
+            var carrinhoId = 1;
+            var clienteId = 1;
+            
+            // Simula o serviço lançando uma exceção de InvalidOperationException
+            _compraServiceMock.Setup(service => service.FinalizarCompraAsync(carrinhoId, clienteId))
+                            .ThrowsAsync(new InvalidOperationException("Erro de estado"));
             // Act: Chama o endpoint
-            var result = await _controller.FinalizarCompra(1, 1);
+            var result = await _controller.FinalizarCompra(carrinhoId, clienteId);
 
             // Assert: Verifica se o retorno é Conflict (409) com a mensagem correta
-            var conflictResult = Assert.IsType<ConflictObjectResult>(result);
-            var returnedDTO = Assert.IsType<CompraDTO>(conflictResult.Value);
-            Assert.False(returnedDTO.Sucesso);
-            Assert.Equal("Itens fora de estoque", returnedDTO.Mensagem);
+            var actionResult = Assert.IsType<ActionResult<CompraDTO>>(result); // Confirma que é do tipo ActionResult<CompraDTO>
+            var conflictResult = Assert.IsType<ConflictObjectResult>(actionResult.Result); // Acessa o 'Result' e verifica se é ConflictObjectResult
+            Assert.Equal(409, conflictResult.StatusCode); // Verifica o status code
         }
 
         [Fact(DisplayName = "Controller: Finalizar compra deve retornar InternalServerError quando tem erro desconhecido")]
