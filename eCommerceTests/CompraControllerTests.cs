@@ -21,25 +21,26 @@ namespace eCommerce.Services
             // Criando a instância do controller, injetando o serviço de compra mockado
             _controller = new CompraController(_compraServiceMock.Object);
         }
-        [Fact]
+        [Fact(DisplayName = "Controller: Finalizar compra deve retornar Ok quando compra bem sucedida")]
         public async Task FinalizarCompra_DeveRetornarOk_QuandoCompraBemSucedida()
         {
-            // Arrange: Configura o comportamento esperado do serviço de compra
-            var compraDTO = new CompraDTO(true, 12345, "Compra finalizada com sucesso.");
-            _compraServiceMock
-                .Setup(x => x.FinalizarCompraAsync(It.IsAny<long>(), It.IsAny<long>()))
-                .ReturnsAsync(compraDTO);
+            // Arrange: Configurando o mock para retornar um objeto CompraDTO com sucesso
+            var compraEsperada = new CompraDTO(true, 12345, "Compra realizada com sucesso.");
+            _compraServiceMock.Setup(x => x.FinalizarCompraAsync(It.IsAny<long>(), It.IsAny<long>()))
+                .ReturnsAsync(compraEsperada);
 
-            // Act: Chama o endpoint com parâmetros válidos
+            // Act: Chamando o método do controller
             var result = await _controller.FinalizarCompra(1, 1);
 
-            // Assert: Verifica se o retorno é Ok (200) e contém o DTO esperado
-            var okResult = Assert.IsType<OkObjectResult>(result);
-            var returnedDTO = Assert.IsType<CompraDTO>(okResult.Value);
-            Assert.True(returnedDTO.Sucesso);
+            // Assert: Verifica se o retorno foi Ok com o objeto correto
+            var okResult = Assert.IsType<OkObjectResult>(result.Result);
+            var compraRetornada = Assert.IsType<CompraDTO>(okResult.Value);
+            Assert.True(compraRetornada.Sucesso);
+            Assert.Equal(12345, compraRetornada.TransacaoPagamentoId);
+            Assert.Equal("Compra realizada com sucesso.", compraRetornada.Mensagem);
         }
 
-        [Fact]
+        [Fact(DisplayName = "Controller: Finalizar compra deve retornar BadRequest quando tem argumento invalido")]
         public async Task FinalizarCompra_DeveRetornarBadRequest_QuandoArgumentoInvalido()
         {
             // Arrange: Simula que o serviço de compra lança uma exceção de argumento inválido
@@ -57,7 +58,7 @@ namespace eCommerce.Services
             Assert.Equal("Carrinho inválido", returnedDTO.Mensagem);
         }
 
-        [Fact]
+        [Fact(DisplayName = "Controller: Finalizar compra deve retornar Conflict quando tem erro de estado")]
         public async Task FinalizarCompra_DeveRetornarConflict_QuandoErroDeEstado()
         {
             // Arrange: Simula que o serviço de compra lança uma exceção de estado inválido
@@ -75,7 +76,7 @@ namespace eCommerce.Services
             Assert.Equal("Itens fora de estoque", returnedDTO.Mensagem);
         }
 
-        [Fact]
+        [Fact(DisplayName = "Controller: Finalizar compra deve retornar InternalServerError quando tem erro desconhecido")]
         public async Task FinalizarCompra_DeveRetornarInternalServerError_QuandoErroDesconhecido()
         {
             // Arrange: Simula um erro inesperado (genérico)

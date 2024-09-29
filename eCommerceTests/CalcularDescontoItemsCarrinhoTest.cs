@@ -82,48 +82,56 @@ namespace eCommerceTests
         }
 
         [Fact(DisplayName = "Teste: Desconto de 10% para carrinho acima de R$ 500,00.")]
-        public void TestDescontoDe10PorCento()
+        public void TestDesconto10Porcento()
         {
-            // Arrange
-            var carrinho = new CarrinhoDeCompras(1, new Cliente { Id = 1, Tipo = TipoCliente.BRONZE }, new List<ItemCompra>(), DateTime.Now);
-            decimal valorTotal = 600.00m; // Valor total acima de R$ 500,00
-            decimal descontoEsperado = valorTotal * 0.10m;
+            var itens = new List<ItemCompra>
+            {
+                new ItemCompra(1, new Produto(1, "Produto A", "Descrição A", 300, 5, TipoProduto.ROUPA), 1),
+                new ItemCompra(2, new Produto(2, "Produto B", "Descrição B", 300, 5, TipoProduto.MOVEL), 1)
+            };
 
-            // Act
-            var descontoCalculado = carrinho.CalcularDescontoItems();
+            var carrinho = new CarrinhoDeCompras(1, new Cliente(), itens, DateTime.Now);
 
-            // Assert
-            Assert.Equal(descontoEsperado, descontoCalculado);
+            decimal desconto = carrinho.CalcularDescontoItems();
+
+            Assert.Equal(60, desconto); // 10% de 600
         }
 
         [Fact(DisplayName = "Teste: Desconto de 20% para carrinho acima de R$ 1000,00.")]
         public void TestDescontoDe20PorCento()
         {
             // Arrange
-            var carrinho = new CarrinhoDeCompras(1, new Cliente { Id = 1, Tipo = TipoCliente.BRONZE }, new List<ItemCompra>(), DateTime.Now);
-            decimal valorTotal = 1200.00m; // Valor total acima de R$ 1000,00
-            decimal descontoEsperado = valorTotal * 0.20m;
+            var itens = new List<ItemCompra>
+        {
+            new ItemCompra(1, new Produto(1, "Produto A", "Descrição A", 600, 5, TipoProduto.ROUPA), 1),
+            new ItemCompra(2, new Produto(2, "Produto B", "Descrição B", 500, 5, TipoProduto.MOVEL), 1)
+        };
 
             // Act
-            var descontoCalculado = carrinho.CalcularDescontoItems();
+            var carrinho = new CarrinhoDeCompras(1, new Cliente(), itens, DateTime.Now);
+
+            decimal desconto = carrinho.CalcularDescontoItems();
 
             // Assert
-            Assert.Equal(descontoEsperado, descontoCalculado);
+            Assert.Equal(220, desconto);
         }
 
         [Fact(DisplayName = "Teste: Sem desconto para carrinho até R$ 500,00.")]
         public void TestSemDesconto()
         {
             // Arrange
-            var carrinho = new CarrinhoDeCompras(1, new Cliente { Id = 1, Tipo = TipoCliente.BRONZE }, new List<ItemCompra>(), DateTime.Now);
-            decimal valorTotal = 400.00m; // Valor total abaixo de R$ 500,00
-            decimal descontoEsperado = 0m;
+            var itens = new List<ItemCompra>
+            {
+                new ItemCompra(1, new Produto(1, "Produto A", "Descrição A", 200, 5, TipoProduto.ROUPA), 1)
+            };
+
+            var carrinho = new CarrinhoDeCompras(1, new Cliente(), itens, DateTime.Now);
 
             // Act
             var descontoCalculado = carrinho.CalcularDescontoItems();
 
             // Assert
-            Assert.Equal(descontoEsperado, descontoCalculado);
+            Assert.Equal(0, descontoCalculado);
         }
 
     }

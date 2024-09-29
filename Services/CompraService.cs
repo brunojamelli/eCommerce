@@ -11,7 +11,7 @@ using Ecommerce.Entity;
 
 namespace ecommerce.Services
 {
-    public class CompraService
+    public class CompraService : ICompraService
     {
         private readonly CarrinhoDeComprasService _carrinhoService;
         private readonly ClienteService _clienteService;
@@ -98,7 +98,8 @@ namespace ecommerce.Services
 
         public decimal CalcularCustoTotal(CarrinhoDeCompras carrinho)
         {
-            return carrinho.Itens.Sum(item => item.Produto.Preco * item.Quantidade);
+            // return carrinho.Itens.Sum(item => item.Produto.Preco * item.Quantidade);
+            return carrinho.CalcularValorFinal();
         }
 
     }
