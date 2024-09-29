@@ -99,5 +99,30 @@ namespace eCommerce.Tests
             // Assert - frete deve ser calculado como 7,00 por kg
             Assert.Equal(360.5m, frete); // Peso total: 51.5 kg, frete: 51.5 kg * R$ 7,00
         }
+        [Theory(DisplayName = "Teste para carrinho com peso total igual a 50 kg (erro) e maior que 50 (R$ 7,00 por kg):")]
+        [InlineData(30.00, 20.00, 200.00)]
+        [InlineData(30.00, 20.01, 350.07)] 
+        [InlineData(30.00, 20.02, 350.14)] 
+        public void TestCalcularFrete_PesoIgual50kg_E_MaiorQue50(decimal pesoProd1, decimal pesoProd2, decimal freteEsperado)
+        {
+            // Produtos de exemplo
+            var produto1 = new Produto(1, "Geladeira", "Geladeira Frost Free 400L", 2999.99m, pesoProd1, TipoProduto.ELETRONICO);
+            var produto2 = new Produto(2, "Micro-ondas", "Micro-ondas 30L", 499.99m, pesoProd2, TipoProduto.ELETRONICO);
+            
+            // Carrinho de exemplo
+            var itens = new List<ItemCompra>
+            {
+                new ItemCompra(1, produto1, 1),
+                new ItemCompra(2, produto2, 1)
+            };
+
+            var carrinho = new CarrinhoDeCompras(1, new Cliente(1, "Bruno", TipoCliente.BRONZE), itens, DateTime.Now);
+
+            // Calcula o frete
+            decimal frete = carrinho.CalcularFrete();
+
+            // Assert - frete deve ser calculado como 4,00 por kg
+            Assert.Equal(freteEsperado, frete); // Peso total: 50 kg, frete: 50 kg * R$ 4,00
+        }
     }
 }
