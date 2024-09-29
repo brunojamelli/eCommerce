@@ -39,8 +39,13 @@ Este projeto tem como objetivo testar a lógica de um sistema de carrinho de com
 - **xUnit** para os testes automatizados.
 - **Moq** para a criação de mocks.
 - **FakeItEasy** para a criação de fakes nos testes.
-
-## Resultados
+## Como os testes foram implementados ?
+  No diretório `/EcommerceTests` estão implementados os códigos de testes unitários, da camada de serviço e da camada de controle (usando *test double* e *mock objects*).
+  
+  Os testes unitários que testam o calculo do frete do carrinho estão na classe *CalculaFreteCarrinhoTest* e os que testam os métodos de calculo de desconto de frete 
+  e desconto do total da compra estão na classe *CalcularDescontoItemsCarrinhoTest*.
+  
+  Já os testes que cuidam da camada de controller estão presentes na classe *CompraControllerTests* e os que testam a camada de serviço estão presentes em *CompraServiceTests* e *CompraServiceUnitTest*.
 
 ## Como executar o projeto
 ``
