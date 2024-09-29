@@ -20,23 +20,26 @@ Este projeto tem como objetivo testar a lógica de um sistema de carrinho de com
 
 ## Estrutura do Projeto
 
-- `/src` - Contém os arquivos de código-fonte do projeto.
-  - `/Controllers` - Contém todos os arquivos de Controllers do projeto.
-   - **CompraController**: Controlador responsável por gerenciar a finalização das compras.
-  - `/Controllers` - Contém todos os arquivos de Services do projeto.
-   - **CompraService**: Serviço que contém a lógica de negócio, como cálculo do preço total da compra e interação com serviços externos.
-- `/Ecommerce.tests` - Contém os arquivos de teste automatizados.
+- `/Controllers` - Contém todos os arquivos de Controllers do projeto.
+  - **CompraController**: Controlador responsável por gerenciar a finalização das compras.
+- `/Services` - Contém todos os arquivos de Services do projeto.
+  - **CompraService**: Serviço que contém a lógica de negócio, como cálculo do preço total da compra e interação com serviços externos.
+- `/Domain` - Contém as subpastas/namespaces DTO e Entity do projeto.
+   - `/Entity` - Contém todos os arquivos de Entidades.
+   - `/DTOs` - Contém todos os arquivos de DTOs.
+- `/EcommerceTests` - Contém os arquivos de teste automatizados.
   - Testes para a camada de **Serviço**: Validação do cálculo do preço total.
   - Testes para a camada de **Controller**: Simulação de serviços de estoque e pagamento, e validação dos endpoints.
+- `/External` - Contém a subpastas/namespace Fake e as interfaces IEstoqueExternal e IPagamento External.
+- `/Repository` - Contém as classes e interfaces de repositório.
+- `/Services` - Contém as classes e interfaces de serviços do projeto.
 
 ## Tecnologias Utilizadas
-- **C#** e **.NET 6** como linguagem e framework base.
+- **C#** e **.NET 7** como linguagem e framework base.
 - **xUnit** para os testes automatizados.
 - **Moq** para a criação de mocks.
 - **FakeItEasy** para a criação de fakes nos testes.
   
-## Contribuições
-Este projeto foi desenvolvido em equipe, com cada integrante sendo responsável por diferentes partes do código e dos testes.
 
 ## Como executar o projeto
 ``
@@ -62,11 +65,6 @@ dotnet test --filter "FullyQualifiedName~YourNamespace.YourTestClassName"
 ```
 dotnet test --filter "FullyQualifiedName~CalculaFreteProdutoTest"
 ```
-
-## Autores
-- Nome 1 - Responsável pela camada de serviço.
-- Nome 2 - Responsável pela camada de controller.
-- Nome 3 - Implementação dos testes de caixa preta e branca.
 
 ## Licença
 Este projeto é distribuído sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
