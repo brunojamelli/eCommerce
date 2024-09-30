@@ -58,6 +58,24 @@ namespace eCommerceTests
                 mockPagamentoService.Object.AutorizarPagamento(4111111111111111, 100.00));
         }
 
+        [Fact(DisplayName = "Pagamento: Autorização Verifica Parametros")]
+        public void AutorizarPagamento_VerificaParametros()
+        {
+            // Arrange
+            var mockPagamentoService = new Mock<IPagamentoExternal>();
+            mockPagamentoService
+                .Setup(x => x.AutorizarPagamento(It.Is<long>(v => v > 0), It.Is<double>(c => c > 16)))
+                .Returns(new PagamentoDTO(true, 123456));
+
+            // Act
+            var result = mockPagamentoService.Object.AutorizarPagamento(4111111111111111, 100.00);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.True(result.Autorizado);
+            mockPagamentoService.Verify(x => x.AutorizarPagamento(4111111111111111, 100.00), Times.Once);
+        }
+
 
     }
 }
