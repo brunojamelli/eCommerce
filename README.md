@@ -47,7 +47,13 @@ Este projeto tem como objetivo testar a lógica de um sistema de carrinho de com
   
   Já os testes que cuidam da camada de controller estão presentes na classe ``CompraControllerTests`` e os que testam a camada de serviço estão presentes em ``CompraServiceTests`` e ``CompraServiceUnitTest`` e ``PagamentoServiceTests`` (que cuida especificamente dos testes da simulação do serviço de pagamentos).
 
-  Em relação a implementação do test double do tipo fake para simular o serviço de estoque e ao uso de mock objects para simular o comportamento do serviço de pagamentos, o diretorio External contem duas subpastas, *fake* e *Stub*, onde estão implementadas logicas de fake e stup para simulação de estoque e de serviço externo de pagamento, essas implementações estão nas classes EstoqueSimulado, Pagamento simulado, EstoqueExternalStubSempre e EstoqueExternalStubSempre.
+Em relação à implementação do *test double* do tipo *fake* para simular o serviço de estoque e ao uso de *mock objects* para simular o comportamento do serviço de pagamentos, o diretório `External` contém duas subpastas: `Fake` e `Stub`.
+
+- Na pasta `Fake`, estão implementadas as lógicas de simulação do estoque e do serviço externo de pagamento, nas classes `EstoqueSimulado` e `PagamentoSimulado`.
+- Já na pasta `Stub`, estão as classes `EstoqueExternalStubSucesso` e `PagamentoSucessoServiceStub`, que implementam o comportamento dos *stubs* para simular o estoque e o serviço de pagamento.
+
+Essas implementações fornecem uma base para testar o sistema sem a necessidade de conectar-se a serviços reais, permitindo simular diferentes cenários de disponibilidade de estoque e pagamento.
+
 
 ## Como executar o projeto
 ``

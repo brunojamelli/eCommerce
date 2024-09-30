@@ -6,7 +6,7 @@ using eCommerce.Domain.DTO;
 
 namespace eCommerce.External.Stub
 {
-    public class EstoqueExternalStubSempre : IEstoqueExternal
+    public class EstoqueExternalStubSucesso : IEstoqueExternal
     {
         public EstoqueBaixaDTO DarBaixa(List<long> produtosIds, List<long> produtosQuantidades)
         {
