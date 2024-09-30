@@ -91,3 +91,26 @@ dotnet test --logger "console;verbosity=detailed" --filter "FullyQualifiedName~C
 
 ## Licença
 Este projeto é distribuído sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+
+
+##  Executar os testes de caixa branca
+
+**1-** No arquivo .csproj do seu projeto de teste, adicione a seguinte referência ao Coverlet:
+```
+<ItemGroup>
+  <PackageReference Include="coverlet.collector" Version="3.1.2" />
+</ItemGroup>
+```
+**2-** Execute os testes
+```
+dotnet test --collect:"XPlat Code Coverage"
+```
+**3-** Instale a ferramenta abaixo pra gerar o relatório visual:
+```
+dotnet tool install --global dotnet-reportgenerator-globaltool
+```
+4- Gerando o relarório:
+```
+reportgenerator -reports:./TestResults/**/coverage.cobertura.xml -targetdir:./coverage-report -reporttypes:Html
+```
+5- O resultado pode ser visualizado no diretório `/coverage-report`
