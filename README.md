@@ -29,8 +29,9 @@ Este projeto tem como objetivo testar a lógica de um sistema de carrinho de com
    - `/DTOs` - Contém todos os arquivos de DTOs.
 - `/EcommerceTests` - Contém os arquivos de teste automatizados.
   - Testes para a camada de **Serviço**: Validação do cálculo do preço total.
-  - Testes para a camada de **Controller**: Simulação de serviços de estoque e pagamento, e validação dos endpoints.
-- `/External` - Contém a subpastas/namespace Fake e as interfaces IEstoqueExternal e IPagamento External.
+  - Testes para a camada de **Controle**: Simulação de serviços de estoque e pagamento, e validação dos endpoints.
+  - Testes unitários para as regras de Cálculo de Frete, Cálculo de desconto do frete e Cálculo de desconto da compra.
+- `/External` - Contém as subpastas/namespaces Fake e Stub e as interfaces IEstoqueExternal e IPagamento External.
 - `/Repository` - Contém as classes e interfaces de repositório.
 - `/Services` - Contém as classes e interfaces de serviços do projeto.
 
