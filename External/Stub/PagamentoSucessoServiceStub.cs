@@ -18,7 +18,7 @@ namespace eCommerce.External.Stub
 
         public void CancelarPagamento(long clienteId, long pagamentoTransacaoId)
         {
-            throw new NotImplementedException();
+            Console.WriteLine($"Pagamento com transação ID {pagamentoTransacaoId} cancelado para o cliente {clienteId}.");;
         }
     }
 }

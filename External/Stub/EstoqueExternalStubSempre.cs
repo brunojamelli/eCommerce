@@ -13,8 +13,8 @@ namespace eCommerce.External.Stub
             return new EstoqueBaixaDTO(true);
         }
         public DisponibilidadeDTO VerificarDisponibilidade(List<long> produtosIds, List<long> produtosQuantidades)
-    {
-        return new DisponibilidadeDTO(true, new List<long>());
-    }
+        {
+            return new DisponibilidadeDTO(true, new List<long>());
+        }
     }
 }
