@@ -40,12 +40,14 @@ Este projeto tem como objetivo testar a lógica de um sistema de carrinho de com
 - **Moq** para a criação de mocks.
 - **FakeItEasy** para a criação de fakes nos testes.
 ## Como os testes foram implementados ?
-  No diretório `/EcommerceTests` estão implementados os códigos de testes unitários, da camada de serviço e da camada de controle (usando *test double* e *mock objects*).
+  No diretório `/EcommerceTests` estão implementados os códigos de testes unitários, da camada de serviço e da camada de controle (usando ``test double`` e ``mock objects``).
   
-  Os testes unitários que testam o calculo do frete do carrinho estão na classe *CalculaFreteCarrinhoTest* e os que testam os métodos de calculo de desconto de frete 
-  e desconto do total da compra estão na classe *CalcularDescontoItemsCarrinhoTest*.
+  Os testes unitários que verificam o calculo do frete do carrinho estão na classe ``CalculaFreteCarrinhoTest`` e os que cobrem os métodos de calculo de desconto de frete 
+  e desconto do total da compra estão na classe ``CalcularDescontoItemsCarrinhoTest``.
   
-  Já os testes que cuidam da camada de controller estão presentes na classe *CompraControllerTests* e os que testam a camada de serviço estão presentes em *CompraServiceTests* e *CompraServiceUnitTest*.
+  Já os testes que cuidam da camada de controller estão presentes na classe ``CompraControllerTests`` e os que testam a camada de serviço estão presentes em ``CompraServiceTests`` e ``CompraServiceUnitTest`` e ``PagamentoServiceTests`` (que cuida especificamente dos testes da simulação do serviço de pagamentos).
+
+  Em relação a implementação do test double do tipo fake para simular o serviço de estoque e ao uso de mock objects para simular o comportamento do serviço de pagamentos, o diretorio External contem duas subpastas, *fake* e *Stub*, onde estão implementadas logicas de fake e stup para simulação de estoque e de serviço externo de pagamento, essas implementações estão nas classes EstoqueSimulado, Pagamento simulado, EstoqueExternalStubSempre e EstoqueExternalStubSempre.
 
 ## Como executar o projeto
 ``
