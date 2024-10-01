@@ -94,6 +94,28 @@ namespace eCommerce.Tests
             // Act & Assert
             await Assert.ThrowsAsync<InvalidOperationException>(() => _compraService.FinalizarCompraAsync(carrinhoId, clienteId));
         }
+
+        [Fact]
+    public async Task FinalizarCompra_DeveRetornarErro_QuandoPagamentoNaoAutorizado()
+    {
+        // Arrange
+        var carrinhoId = 1; // Exemplo de ID do carrinho
+        var clienteId = 1;  // Exemplo de ID do cliente
+        var custoTotal = 150.0; // Exemplo de custo total da compra
+
+        // Configurar o mock para simular pagamento não autorizado
+        _pagamentoExternalMock
+            .Setup(service => service.AutorizarPagamento(clienteId, custoTotal))
+            .Returns(new PagamentoDTO(false, 12345));
+
+        // Ação
+        var resultado = await _compraService.FinalizarCompraAsync(carrinhoId, clienteId);
+
+        // Assert
+        Assert.False(resultado.Sucesso);
+        Assert.Equal("Pagamento não autorizado.", resultado.Mensagem);
+        _estoqueExternalMock.Verify(service => service.DarBaixa(It.IsAny<List<long>>(), It.IsAny<List<long>>()), Times.Never);
+    }
        
     }
 }
